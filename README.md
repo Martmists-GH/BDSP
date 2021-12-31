@@ -27,7 +27,7 @@ $ make send         # optional: send to switch using ftp
 
 To use SimpleModManager:
 ```
-$ cmake                        # Configure tasks
+$ cmake .                      # Configure tasks
 $ make starlight_modmanager    # build tree
 $ make send_modmanager         # optional: send to switch using ftp 
 ```
