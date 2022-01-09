@@ -1,0 +1,7 @@
+#pragma once
+
+#include "il2cpp.h"
+
+void System_Collections_Generic_List_Enumerator_NotificationEventCB___Dispose (System_Collections_Generic_List_Enumerator_NotificationEventCB__o __this, const MethodInfo* method_info);
+bool System_Collections_Generic_List_Enumerator_NotificationEventCB___MoveNext (System_Collections_Generic_List_Enumerator_NotificationEventCB__o __this, const MethodInfo* method_info);
+NexPlugin_NotificationEventCB_o* System_Collections_Generic_List_Enumerator_NotificationEventCB___get_Current (System_Collections_Generic_List_Enumerator_NotificationEventCB__o __this, const MethodInfo* method_info);

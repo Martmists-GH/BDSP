@@ -1,12 +1,11 @@
-# Starlight - BDSP Example 
+# Starlight - BDSP 
 
 This repository contains a fork of [Starlight](https://github.com/shadowninja108/Starlight), a switch modding template,
 based on [Dialga](https://github.com/CraftyBoss/Dialga). 
 
 It has been modified to use CMake and supports importing in CLion.
-Additionally, it has tasks to easily integrate with [SimpleModManager](https://github.com/nadrino/SimpleModManager).
-
-To get started, copy `config.cmake.template` to `config.cmake` and change the IP to the IP of your switch.
+Additionally, it has tasks to easily integrate with [SimpleModManager](https://github.com/nadrino/SimpleModManager),
+as well as export to common emulators.
 
 ## Prerequisites
 
@@ -16,21 +15,25 @@ To get started, copy `config.cmake.template` to `config.cmake` and change the IP
 
 ## Building
 
-Build has only been tested on Arch Linux.
+The build has only been tested on Arch Linux and WSL, and is not designed for Windows.
 
 Simply run:
 ```
-$ cmake .           # Configure tasks
-$ make starlight    # build tree
-$ make send         # optional: send to switch using ftp 
+$ cmake . -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake  # Configure tasks
+$ make release_atmosphere                               # build tree
+$ make zip_atmosphere                                   # export as zip
+$ make send_atmosphere                                  # optional: send to switch using ftp 
 ```
 
 To use SimpleModManager:
 ```
-$ cmake .                      # Configure tasks
-$ make starlight_modmanager    # build tree
-$ make send_modmanager         # optional: send to switch using ftp 
+$ cmake . -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake  # Configure tasks
+$ make release_modmanager                               # build tree
+$ make zip_modmanager                                   # export as zip
+$ make send_modmanager                                  # optional: send to switch using ftp 
 ```
+
+There's also targets for Ryujinx and Yuzu (without the send_ target).
 
 ## Installing (Atmosphère)
 
@@ -39,6 +42,7 @@ After a successful build, simply transfer the files located inside `starlight_pa
 ## Credits
 
 - CraftyBoss - The initial Dialga repository
+- 
 
 ---
 

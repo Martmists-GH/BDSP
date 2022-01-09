@@ -1,0 +1,7 @@
+#pragma once
+
+#include "il2cpp.h"
+
+void System_Collections_Generic_List_Enumerator_EffectData___Dispose (System_Collections_Generic_List_Enumerator_EffectData__o __this, const MethodInfo* method_info);
+bool System_Collections_Generic_List_Enumerator_EffectData___MoveNext (System_Collections_Generic_List_Enumerator_EffectData__o __this, const MethodInfo* method_info);
+Effect_EffectData_o* System_Collections_Generic_List_Enumerator_EffectData___get_Current (System_Collections_Generic_List_Enumerator_EffectData__o __this, const MethodInfo* method_info);

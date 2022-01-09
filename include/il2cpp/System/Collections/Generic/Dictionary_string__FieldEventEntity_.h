@@ -1,0 +1,7 @@
+#pragma once
+
+#include "il2cpp.h"
+
+void System_Collections_Generic_Dictionary_string__FieldEventEntity____ctor (System_Collections_Generic_Dictionary_string__FieldEventEntity__o* __this, const MethodInfo* method_info);
+void System_Collections_Generic_Dictionary_string__FieldEventEntity___Clear (System_Collections_Generic_Dictionary_string__FieldEventEntity__o* __this, const MethodInfo* method_info);
+bool System_Collections_Generic_Dictionary_string__FieldEventEntity___TryGetValue (System_Collections_Generic_Dictionary_string__FieldEventEntity__o* __this, System_String_o* key, FieldEventEntity_o** value, const MethodInfo* method_info);

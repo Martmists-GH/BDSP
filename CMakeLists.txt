@@ -1,79 +1,30 @@
-cmake_minimum_required(VERSION 3.7)
-
+cmake_minimum_required(VERSION 3.21)
 get_filename_component(PROJ_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME_WE)
 project(${PROJ_NAME})
 
+set(CMAKE_CXX_STANDARD 20)
 enable_language(ASM C CXX)
 
-set(BDSPVER 113)
-set(BDSPVERSTR 1.1.3)
+# Error if not using switch toolchain file
+if (NOT SWITCH)
+    message(FATAL_ERROR "Not targeting switch, make sure to specify -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake")
+endif()
 
-include(${PROJECT_SOURCE_DIR}/config.cmake)
+# Create config if missing
+if (NOT EXISTS ${CMAKE_SOURCE_DIR}/config.cmake)
+    file(COPY ${CMAKE_SOURCE_DIR}/config.cmake.template
+            DESTINATION ${CMAKE_BINARY_DIR})
+    file(RENAME ${CMAKE_BINARY_DIR}/config.cmake.template ${CMAKE_SOURCE_DIR}/config.cmake)
+endif()
 
-# Project sources
-include_directories(${PROJECT_SOURCE_DIR}/include/)
-file(GLOB_RECURSE SOURCES_ASM ${PROJECT_SOURCE_DIR}/source/*.s)
-file(GLOB_RECURSE SOURCES_C ${PROJECT_SOURCE_DIR}/source/*.c)
-file(GLOB_RECURSE SOURCES_CXX ${PROJECT_SOURCE_DIR}/source/*.cpp)
-set(SOURCES_MISC ${PROJECT_SOURCE_DIR}/patches/codehook.slpatch)
+include(${CMAKE_SOURCE_DIR}/config.cmake)
 
-# Apply compile definitions
-get_directory_property(COMPILE_DEFS DIRECTORY ${CMAKE_SOURCE_DIR} COMPILE_DEFINITIONS)
-list(TRANSFORM COMPILE_DEFS PREPEND "-D")
+# Global vars
+include(${CMAKE_SOURCE_DIR}/cmake/common.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/functions.cmake)
 
-# Dummy to make clion work
-add_library(dummy_do_not_use_ide_metadata_only STATIC ${SOURCES_ASM} ${SOURCES_C} ${SOURCES_CXX})
+# elf/nso/ips output
+include(${CMAKE_SOURCE_DIR}/cmake/main_target.cmake)
 
-add_custom_target(
-        compile_mod
-        COMMAND make all -f ${CMAKE_SOURCE_DIR}/MakefileNSO BDSPVER=${BDSPVER} BDSPVERSTR=${BDSPVERSTR} DEFINITIONS="${COMPILE_DEFS}"
-        COMMAND rm ${CMAKE_SOURCE_DIR}/${CMAKE_PROJECT_NAME}${BDSPVER}.elf
-        COMMAND sh -c "rm -rf ${CMAKE_SOURCE_DIR}/starlight_patch_${BDSPVER}/*.ips"
-        COMMAND python3 ${CMAKE_SOURCE_DIR}/scripts/gen_patch.py ${BDSPVER}
-        SOURCES ${SOURCES_ASM} ${SOURCES_C} ${SOURCES_CXX} ${SOURCES_MISC}
-)
-
-add_custom_target(
-        starlight ALL
-        COMMAND mkdir -p "starlight_patch_${BDSPVER}/atmosphere/exefs_patches/${CMAKE_PROJECT_NAME}"
-        COMMAND mkdir -p "starlight_patch_${BDSPVER}/atmosphere/contents/0100000011D90000/exefs/"
-        COMMAND sh -c "mv starlight_patch_${BDSPVER}/*.ips starlight_patch_${BDSPVER}/atmosphere/exefs_patches/${CMAKE_PROJECT_NAME}/"
-        COMMAND mv ${CMAKE_SOURCE_DIR}/${CMAKE_PROJECT_NAME}${BDSPVER}.nso starlight_patch_${BDSPVER}/atmosphere/contents/0100000011D90000/exefs/subsdk1
-        DEPENDS compile_mod
-)
-
-
-add_custom_target(
-        starlight_modmanager
-        COMMAND mkdir -p "starlight_patch_${BDSPVER}/mods/Pokemon Brilliant Diamond/${CMAKE_PROJECT_NAME}/exefs_patches/${CMAKE_PROJECT_NAME}/"
-        COMMAND mkdir -p "starlight_patch_${BDSPVER}/mods/Pokemon Brilliant Diamond/${CMAKE_PROJECT_NAME}/contents/0100000011D90000/exefs/"
-        COMMAND sh -c "mv starlight_patch_${BDSPVER}/*.ips 'starlight_patch_${BDSPVER}/mods/Pokemon Brilliant Diamond/${CMAKE_PROJECT_NAME}/exefs_patches/${CMAKE_PROJECT_NAME}/'"
-        COMMAND mv ${CMAKE_SOURCE_DIR}/${CMAKE_PROJECT_NAME}${BDSPVER}.nso "starlight_patch_${BDSPVER}/mods/Pokemon Brilliant Diamond/${CMAKE_PROJECT_NAME}/contents/0100000011D90000/exefs/subsdk1"
-        DEPENDS compile_mod
-)
-
-add_custom_target(
-        starlight_yuzu
-        COMMAND mkdir -p "starlight_patch_${BDSPVER}/load/0100000011D90000/${CMAKE_PROJECT_NAME}/exefs/"
-        COMMAND sh -c "mv starlight_patch_${BDSPVER}/*.ips 'starlight_patch_${BDSPVER}/load/0100000011D90000/${CMAKE_PROJECT_NAME}/exefs/'"
-        COMMAND mv ${CMAKE_SOURCE_DIR}/${CMAKE_PROJECT_NAME}${BDSPVER}.nso "starlight_patch_${BDSPVER}/load/0100000011D90000/${CMAKE_PROJECT_NAME}/exefs/subsdk1"
-        DEPENDS compile_mod
-)
-
-add_custom_target(
-        send
-        COMMAND python3 ${CMAKE_SOURCE_DIR}/scripts/send_patch.py ${SWITCH_IP}
-        DEPENDS starlight
-)
-
-add_custom_target(
-        send_modmanager
-        COMMAND python3 ${CMAKE_SOURCE_DIR}/scripts/send_patch.py ${SWITCH_IP}
-        DEPENDS starlight_modmanager
-)
-
-set_property(
-        TARGET compile_mod
-        APPEND
-        PROPERTY ADDITIONAL_CLEAN_FILES build${BDSPVER} starlight_patch_${BDSPVER}
-)
+# Release folder structures
+include(${CMAKE_SOURCE_DIR}/cmake/releases.cmake)

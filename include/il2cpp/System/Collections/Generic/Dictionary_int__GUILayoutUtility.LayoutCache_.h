@@ -1,0 +1,7 @@
+#pragma once
+
+#include "il2cpp.h"
+
+void System_Collections_Generic_Dictionary_int__GUILayoutUtility_LayoutCache____ctor (System_Collections_Generic_Dictionary_int__GUILayoutUtility_LayoutCache__o* __this, const MethodInfo* method_info);
+void System_Collections_Generic_Dictionary_int__GUILayoutUtility_LayoutCache___set_Item (System_Collections_Generic_Dictionary_int__GUILayoutUtility_LayoutCache__o* __this, int32_t key, UnityEngine_GUILayoutUtility_LayoutCache_o* value, const MethodInfo* method_info);
+bool System_Collections_Generic_Dictionary_int__GUILayoutUtility_LayoutCache___TryGetValue (System_Collections_Generic_Dictionary_int__GUILayoutUtility_LayoutCache__o* __this, int32_t key, UnityEngine_GUILayoutUtility_LayoutCache_o** value, const MethodInfo* method_info);
