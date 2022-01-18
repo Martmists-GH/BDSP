@@ -15,6 +15,7 @@ build.ninja
 # Build outputs
 release/
 script.json
+linkerscripts/symbols.ld
 
 # IDEs and editors
 .idea/
