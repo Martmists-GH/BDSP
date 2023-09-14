@@ -1,3 +1,9 @@
+# THIS REPOSITORY IS DEPRECATED!
+
+Instead, go to [https://github.com/Martmists-GH/BDSP_Rombase](https://github.com/Martmists-GH/BDSP_Rombase).
+
+---
+
 # Starlight - BDSP 
 
 This repository contains a fork of [Starlight](https://github.com/shadowninja108/Starlight), a switch modding template,
